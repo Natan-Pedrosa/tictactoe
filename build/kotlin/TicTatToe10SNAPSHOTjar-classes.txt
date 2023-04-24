@@ -1,0 +1,1 @@
+C:\Users\natan\OneDrive\Documentos\Projects Kotlin\TicTatToe\build\classes\kotlin\main\GameMasterKt.class;C:\Users\natan\OneDrive\Documentos\Projects Kotlin\TicTatToe\build\classes\kotlin\main\MainKt.class
