@@ -1,17 +1,4 @@
 /*
-> O_OXXO_XX
----------
-| O _ O |
-| X X O |
-| _ X X |
----------
-Take a string entered by the user and print the game grid as in the previous stage.
-Analyze the game state and print the result. Possible states:
-Game not finished when neither side has three in a row but the grid still has empty cells.
-Draw when no side has a three in a row and the grid has no empty cells.
-X wins when the grid has three X’s in a row (including diagonals).
-O wins when the grid has three O’s in a row (including diagonals).
-Impossible when the grid has three X’s in a row as well as three O’s in a row, or there are a lot more X's than O's or vice versa (the difference should be 1 or 0; if the difference is 2 or more, then the game state is impossible).
  */
 fun main() {
     game()
@@ -40,10 +27,10 @@ fun show(msn: String) {
         }
     }
     println("---------")
-    println(hasWin(msn))
+    println(showResult(msn))
 }
 
-fun hasWin(values: String): String {
+fun showResult(values: String): String {
     val wins = mutableListOf(
         mutableListOf(0, 1, 2),
         mutableListOf(3, 4, 5),
