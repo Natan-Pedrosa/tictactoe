@@ -9,7 +9,7 @@ fun main() {
 fun game() {
     var board = initGame()
     show(board)
-    board = enterNewValue(enter)
+    //board = enterNewValue(enter)
     // show(board)
 }
 
