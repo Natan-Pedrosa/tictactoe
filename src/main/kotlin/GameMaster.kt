@@ -7,6 +7,8 @@ const val WIN_O = "O wins"
 const val GAME_NO_FINISHED = "Game not finished"
 const val IMPOSSIBLE = "Impossible"
 const val DRAW = "Draw"
+const val VALUE_X = "X"
+const val VALUE_O = "O"
 
 fun main() {
     game()
@@ -17,24 +19,24 @@ fun game() {
     show(board)
     var isTurnForX = true
     var hasNextMove = true
+    var result = ""
 
     while(hasNextMove) {
         when (isTurnForX) {
             true -> {
-                board = makeMove(board, "X")
+                board = makeMove(board, VALUE_X)
                 isTurnForX = false
             }
             false -> {
-                board = makeMove(board, "O")
+                board = makeMove(board, VALUE_O)
                 isTurnForX = true
             }
         }
-        val result = showResult(board)
-
-        hasNextMove = result != WIN_X || result != WIN_O
+        result = showResult(board)
+        hasNextMove = result != WIN_X && result != WIN_O
         show(board)
     }
-
+    println(result)
 }
 
 fun initGame(): MutableList<MutableList<String>> {
@@ -78,14 +80,19 @@ fun makeMove(board: MutableList<MutableList<String>>, newValue: String):MutableL
 
 fun showResult(board: MutableList<MutableList<String>>): String {
     val wins = mutableListOf(
-        mutableListOf(0, 1, 2),
-        mutableListOf(3, 4, 5),
-        mutableListOf(6, 7, 8),
-        mutableListOf(0, 4, 8),
-        mutableListOf(2, 4, 6),
-        mutableListOf(0, 3, 6),
-        mutableListOf(1, 4, 7),
-        mutableListOf(2, 5, 8),
+        /*
+        |0 1 2|
+        |3 4 5|
+        |6 7 8|
+         */
+        mutableListOf(0, 0, 0, 1, 0, 2),
+        mutableListOf(1, 0, 1, 1, 1, 2),
+        mutableListOf(2, 0, 2, 1, 2, 2),
+        mutableListOf(0, 0, 1, 1, 2, 2),
+        mutableListOf(0, 2, 1, 1, 2, 0),
+        mutableListOf(0, 0, 1, 0, 2, 0),
+        mutableListOf(0, 1, 1, 1, 2, 1),
+        mutableListOf(0, 2, 1, 2, 2, 2),
         )
 
     val msn = mutableListOf(GAME_NO_FINISHED, WIN_X, WIN_O, DRAW, IMPOSSIBLE)
@@ -93,11 +100,16 @@ fun showResult(board: MutableList<MutableList<String>>): String {
     var hasOneWin = 0
 
     for (index in 0 .. wins.lastIndex) {
-        val isValueToWin = board[wins[index][0]].toString() + board[wins[index][1]] + board[wins[index][2]]
+        // val isValueToWin = board[wins[].toString() + board[wins[index][1]] + board[wins[index][2]]
+        val isValueToWin = buildString {
+        append(board[wins[index][0]][wins[index][1]])
+        append(board[wins[index][2]][wins[index][3]])
+        append(board[wins[index][4]][wins[index][5]])
+    }
 
         when (isValueToWin) {
-            "XXX" -> {indexMsn = 1; ++hasOneWin}
-            "OOO" -> {indexMsn = 2; ++hasOneWin}
+            VALUE_X.repeat(3) -> {indexMsn = 1; ++hasOneWin}
+            VALUE_O.repeat(3) -> {indexMsn = 2; ++hasOneWin}
         }
     }
 
@@ -109,8 +121,8 @@ fun showResult(board: MutableList<MutableList<String>>): String {
         for (line in 0..2) {
             for (column in 0..2) {
                 when (board[line][column]) {
-                    "X" -> countX++
-                    "O" -> countO++
+                    VALUE_X -> countX++
+                    VALUE_O -> countO++
                     else -> countUnderLine++
                 }
             }
