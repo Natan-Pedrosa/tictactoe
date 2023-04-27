@@ -2,6 +2,12 @@
  */
 const val MIN_VALUE = 0
 const val MAX_VALUE = 3
+const val WIN_X = "X wins"
+const val WIN_O = "O wins"
+const val GAME_NO_FINISHED = "Game not finished"
+const val IMPOSSIBLE = "Impossible"
+const val DRAW = "Draw"
+
 fun main() {
     game()
 }
@@ -9,8 +15,26 @@ fun main() {
 fun game() {
     var board = initGame()
     show(board)
-    board = makeMove(board, "X")
-    show(board)
+    var isTurnForX = true
+    var hasNextMove = true
+
+    while(hasNextMove) {
+        when (isTurnForX) {
+            true -> {
+                board = makeMove(board, "X")
+                isTurnForX = false
+            }
+            false -> {
+                board = makeMove(board, "O")
+                isTurnForX = true
+            }
+        }
+        val result = showResult(board)
+
+        hasNextMove = result != WIN_X || result != WIN_O
+        show(board)
+    }
+
 }
 
 fun initGame(): MutableList<MutableList<String>> {
@@ -52,7 +76,7 @@ fun makeMove(board: MutableList<MutableList<String>>, newValue: String):MutableL
     }
 }
 
-fun showResult(values: String): String {
+fun showResult(board: MutableList<MutableList<String>>): String {
     val wins = mutableListOf(
         mutableListOf(0, 1, 2),
         mutableListOf(3, 4, 5),
@@ -63,16 +87,17 @@ fun showResult(values: String): String {
         mutableListOf(1, 4, 7),
         mutableListOf(2, 5, 8),
         )
-    val msn = mutableListOf("Game not finished", "X wins", "O wins", "Draw", "Impossible")
+
+    val msn = mutableListOf(GAME_NO_FINISHED, WIN_X, WIN_O, DRAW, IMPOSSIBLE)
     var indexMsn = 0
     var hasOneWin = 0
+
     for (index in 0 .. wins.lastIndex) {
-        val isValueToWin = values[wins[index][0]].toString() + values[wins[index][1]] + values[wins[index][2]]
+        val isValueToWin = board[wins[index][0]].toString() + board[wins[index][1]] + board[wins[index][2]]
 
         when (isValueToWin) {
             "XXX" -> {indexMsn = 1; ++hasOneWin}
             "OOO" -> {indexMsn = 2; ++hasOneWin}
-            else -> {}
         }
     }
 
@@ -81,13 +106,16 @@ fun showResult(values: String): String {
     var countUnderLine = 0
 
     if (indexMsn == 0) {
-       for (value in values) {
-            when (value) {
-                'X' -> countX++
-                'O' -> countO++
-                else -> countUnderLine++
+        for (line in 0..2) {
+            for (column in 0..2) {
+                when (board[line][column]) {
+                    "X" -> countX++
+                    "O" -> countO++
+                    else -> countUnderLine++
+                }
             }
-       }
+        }
+
         val sumXO = countX + countO
 
         indexMsn = if (sumXO < 9) {
