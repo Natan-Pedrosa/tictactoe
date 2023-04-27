@@ -9,70 +9,45 @@ fun main() {
 fun game() {
     var board = initGame()
     show(board)
-    //board = enterNewValue(enter)
-    // show(board)
+    board = makeMove(board, "X")
+    show(board)
 }
 
 fun initGame(): MutableList<MutableList<String>> {
     return mutableListOf(
-        mutableListOf(" ", " ", " "),
-        mutableListOf(" ", " ", " "),
-        mutableListOf(" ", " ", " "))
+        mutableListOf("_", "_", "_"),
+        mutableListOf("_", "_", "_"),
+        mutableListOf("_", "_", "_"))
 }
-
-fun start(): String {
-    print("Digit:")
-    val msn = readln()
-    return msn
-}
-
 fun show(board: MutableList<MutableList<String>>) {
-    /* var line = ""
-    for ((index, value ) in newBoard.withIndex()) {
-        when (index) {
-            0, 3, 6 -> line = "| $value"
-            1, 4, 7 -> line += " $value"
-            else -> println("$line $value |")
-        }
-    }
-    */
+
     println("---------")
     println("| ${board[0][0]} ${board[0][1]} ${board[0][2]} |")
     println("| ${board[1][0]} ${board[1][1]} ${board[1][2]} |")
     println("| ${board[2][0]} ${board[2][1]} ${board[2][2]} |")
     println("---------")
-    //println(showResult(msn))
 }
-
-fun enterNewValue(values: String):String {
-    val board = mutableListOf(
-        mutableListOf(values[0], values[1], values[2]),
-        mutableListOf(values[3], values[4], values[5]),
-        mutableListOf(values[6], values[7], values[8])
-    )
+fun start(): String {
+    print("Digit:")
+    val msn = readln()
+    return msn
+}
+fun makeMove(board: MutableList<MutableList<String>>, newValue: String):MutableList<MutableList<String>> {
+    val newBoard = board
 
     while(true) {
-        print("Digit:")
         val input = readln().split(" ")
 
-        val (valueFirst, valueSecond ) = if (input.size == 2) input else "e e".split("")
+        val (valueFirst, valueSecond ) = if (input.size == 2) input else "e e".split(" ")
 
-        if (valueFirst in "123" && valueSecond in "123") {
-            if (board[valueFirst.toInt() - 1][valueSecond.toInt() - 1] == '_') {
-                board[valueFirst.toInt() - 1][valueSecond.toInt() - 1] = 'X'
-                var result = ""
-                for (index in 0 until 3) {
-                    board[index].forEach { value ->
-                        result += value
-                    }
-                }
+        if (valueFirst[0].isDigit() || valueSecond[0].isDigit()) {
+            if (valueFirst in "123" && valueSecond in "123") {
+                if (newBoard[valueFirst.toInt() - 1][valueSecond.toInt() - 1] == "_") {
+                    newBoard[valueFirst.toInt() - 1][valueSecond.toInt() - 1] = newValue
 
-                return result
-            } else {
-                println("This cell is occupied! Choose another one!")
-            }
-        } else if (valueFirst in "0456789" || valueSecond in "0456789") {
-            println("Coordinates should be from 1 to 3!")
+                    return newBoard
+                } else println("This cell is occupied! Choose another one!")
+            } else println("Coordinates should be from 1 to 3!")
         } else println("You should enter numbers!")
     }
 }
