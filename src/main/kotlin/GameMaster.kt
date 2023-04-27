@@ -33,7 +33,7 @@ fun game() {
             }
         }
         result = showResult(board)
-        hasNextMove = result != WIN_X && result != WIN_O
+        hasNextMove = result != WIN_X && result != WIN_O && result != DRAW
         show(board)
     }
     println(result)
@@ -100,12 +100,11 @@ fun showResult(board: MutableList<MutableList<String>>): String {
     var hasOneWin = 0
 
     for (index in 0 .. wins.lastIndex) {
-        // val isValueToWin = board[wins[].toString() + board[wins[index][1]] + board[wins[index][2]]
         val isValueToWin = buildString {
-        append(board[wins[index][0]][wins[index][1]])
-        append(board[wins[index][2]][wins[index][3]])
-        append(board[wins[index][4]][wins[index][5]])
-    }
+            append(board[wins[index][0]][wins[index][1]])
+            append(board[wins[index][2]][wins[index][3]])
+            append(board[wins[index][4]][wins[index][5]])
+        }
 
         when (isValueToWin) {
             VALUE_X.repeat(3) -> {indexMsn = 1; ++hasOneWin}
